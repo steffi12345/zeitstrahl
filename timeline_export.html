@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f5ef">
+<title>Historische Ereignisse in Europa | Jahr 1 bis 1500</title>
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #f6f5ef;
+    --ink: #202522;
+    --muted: #626960;
+    --line: #c9cec4;
+    --accent: #b54332;
+    --accent-dark: #853526;
+    --surface: #fffefa;
+    --green: #dcebdc;
+    --gold: #f0e5c8;
+    --blue: #dce5ee;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: min(100% - 40px, 1080px);
+    margin: 0 auto;
+    padding: 56px 0 72px;
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 24px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    margin: 0 0 9px;
+    color: var(--accent-dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 730px;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.2rem, 5vw, 4.25rem);
+    font-weight: 500;
+    line-height: 1.04;
+  }
+
+  .range {
+    margin: 13px 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .count {
+    min-width: 118px;
+    padding: 12px 15px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    font-size: 0.9rem;
+  }
+
+  .count strong {
+    display: block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.65rem;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 25px 0 30px;
+  }
+
+  .controls label {
+    flex: 1;
+    max-width: 520px;
+  }
+
+  .controls input {
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 1px solid #aeb5a9;
+    border-radius: 3px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  .controls input:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  dialog button:focus-visible {
+    outline: 3px solid #d17a5e;
+    outline-offset: 3px;
+  }
+
+  .hint {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline::before {
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 86px;
+    width: 1px;
+    background: var(--line);
+    content: "";
+  }
+
+  .event {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 46px;
+    padding: 0 0 23px;
+  }
+
+  .year {
+    position: relative;
+    padding-top: 15px;
+    color: var(--accent-dark);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.17rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .year::after {
+    position: absolute;
+    z-index: 1;
+    top: 23px;
+    right: -29px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    background: var(--paper);
+    content: "";
+  }
+
+  .event-button {
+    display: flex;
+    width: 100%;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 17px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+  }
+
+  .event-button:hover {
+    transform: translateX(3px);
+    border-color: #d5d8ce;
+    background: var(--surface);
+  }
+
+  .event-title {
+    font-size: 1.03rem;
+    font-weight: 600;
+  }
+
+  .event-era {
+    flex: 0 0 auto;
+    padding: 4px 8px;
+    border-radius: 2px;
+    color: #3e463e;
+    font-size: 0.74rem;
+  }
+
+  .era-roman { background: var(--green); }
+  .era-late { background: var(--blue); }
+  .era-early { background: #e6edcf; }
+  .era-high { background: var(--gold); }
+  .era-late-medieval { background: #e4e4df; }
+
+  .empty-state {
+    padding: 24px 0 24px 110px;
+    color: var(--muted);
+  }
+
+  .source {
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+  }
+
+  .source summary {
+    width: fit-content;
+    padding: 18px 0;
+    color: var(--accent-dark);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .source img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border: 1px solid var(--line);
+    background: white;
+  }
+
+  dialog {
+    width: min(540px, calc(100% - 32px));
+    padding: 0;
+    border: 1px solid #aeb5a9;
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 20px 70px #18201638;
+  }
+
+  dialog::backdrop { background: #17201988; }
+
+  .dialog-content { padding: 28px 30px 26px; }
+
+  .dialog-year {
+    margin: 0 0 8px;
+    color: var(--accent-dark);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.15rem;
+  }
+
+  dialog h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .dialog-era {
+    display: inline-block;
+    margin: 17px 0 4px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    font-size: 0.78rem;
+  }
+
+  .dialog-description { margin: 12px 0 23px; color: #454b45; }
+
+  .close-button {
+    min-height: 42px;
+    padding: 9px 15px;
+    border: 0;
+    border-radius: 2px;
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  @media (max-width: 620px) {
+    .page { width: min(100% - 28px, 1080px); padding-top: 32px; }
+    header { grid-template-columns: 1fr; gap: 18px; }
+    .count { width: fit-content; min-width: 0; }
+    .count strong { display: inline; margin-right: 5px; }
+    .controls { display: block; margin: 20px 0 24px; }
+    .hint { margin-top: 9px; }
+    .timeline::before { left: 57px; }
+    .event { grid-template-columns: 42px minmax(0, 1fr); gap: 30px; padding-bottom: 15px; }
+    .year { padding-top: 15px; font-size: 1rem; }
+    .year::after { right: -20px; }
+    .event-button { align-items: flex-start; padding: 12px 10px; }
+    .event-title { font-size: 0.96rem; }
+    .event-era { max-width: 98px; white-space: normal; text-align: right; }
+    .empty-state { padding-left: 72px; }
+    .dialog-content { padding: 23px 21px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Europa · 1 bis 1500</p>
+      <h1>Historische Ereignisse</h1>
+      <p class="range">Eine interaktive Zeitreise vom Römischen Reich bis zum Ende des Mittelalters.</p>
+    </div>
+    <div class="count" aria-live="polite"><strong id="event-count">23</strong> Ereignisse</div>
+  </header>
+
+  <section aria-label="Ereignisse auf der Zeitleiste">
+    <div class="controls">
+      <label>
+        <input id="search" type="search" placeholder="Ereignis oder Jahr suchen" autocomplete="off" aria-label="Ereignis oder Jahr suchen">
+      </label>
+      <p class="hint">Ein Ereignis anklicken, um mehr zu erfahren.</p>
+    </div>
+    <ol class="timeline" id="timeline"></ol>
+    <p class="empty-state" id="empty-state" hidden>Keine passenden Ereignisse gefunden.</p>
+  </section>
+
+  <details class="source">
+    <summary>Ursprüngliche Grafik anzeigen</summary>
+    <img src="Zeitstrahl.png" alt="Historische Ereignisse in Europa von Jahr 1 bis 1500 als grafischer Zeitstrahl">
+  </details>
+</main>
+
+<dialog id="event-dialog" aria-labelledby="dialog-title">
+  <div class="dialog-content">
+    <p class="dialog-year" id="dialog-year"></p>
+    <h2 id="dialog-title"></h2>
+    <span class="dialog-era" id="dialog-era"></span>
+    <p class="dialog-description" id="dialog-description"></p>
+    <form method="dialog"><button class="close-button">Schließen</button></form>
+  </div>
+</dialog>
+
+<script>
+  const eras = [
+    { name: "Römische Kaiserzeit", start: 1, end: 280, className: "era-roman" },
+    { name: "Spätantike", start: 281, end: 564, className: "era-late" },
+    { name: "Frühmittelalter", start: 565, end: 1060, className: "era-early" },
+    { name: "Hochmittelalter", start: 1061, end: 1250, className: "era-high" },
+    { name: "Spätmittelalter", start: 1251, end: 1500, className: "era-late-medieval" }
+  ];
+
+  const events = [
+    { year: 9, title: "Varusschlacht", description: "Ein germanisches Bündnis besiegt drei römische Legionen. Rom gibt daraufhin seine Pläne auf, das Gebiet östlich des Rheins dauerhaft als Provinz einzugliedern." },
+    { year: 79, title: "Ausbruch des Vesuvs bei Pompeji", description: "Der Ausbruch des Vesuvs verschüttet Pompeji und weitere Orte am Golf von Neapel unter Asche und Bimsstein." },
+    { year: 313, title: "Mailänder Vereinbarung", description: "Kaiser Konstantin und Kaiser Licinius vereinbaren Religionsfreiheit im Römischen Reich. Christinnen und Christen dürfen ihren Glauben nun offen ausüben." },
+    { year: 380, title: "Christentum wird Staatsreligion", description: "Kaiser Theodosius I. erhebt das nizänische Christentum mit dem Edikt von Thessaloniki zur maßgeblichen Religion des Reiches." },
+    { year: 395, title: "Teilung des Römischen Reiches", description: "Nach dem Tod Theodosius’ I. wird das Reich dauerhaft von getrennten Höfen im Westen und Osten regiert." },
+    { year: 476, title: "Untergang des Weströmischen Reiches", description: "Der germanische Heerführer Odoaker setzt den letzten weströmischen Kaiser, Romulus Augustulus, ab. Das Jahr gilt traditionell als Ende des Weströmischen Reiches." },
+    { year: 570, title: "Geburt Mohammeds", description: "Mohammed wird nach traditioneller Datierung in Mekka geboren. Er wird später zum Begründer des Islam." },
+    { year: 622, title: "Hedschra", description: "Mohammed und seine Anhänger wandern von Mekka nach Medina aus. Die Hedschra bildet den Ausgangspunkt der islamischen Zeitrechnung." },
+    { year: 754, title: "Pippinische Schenkung", description: "Der fränkische König Pippin überträgt Gebiete in Mittelitalien an den Papst. Die Schenkung stärkt die weltliche Macht des Papsttums." },
+    { year: 793, title: "Beginn der Wikingerzeit", description: "Der Überfall auf das Kloster Lindisfarne wird oft als Beginn der Wikingerzeit in Europa angesehen." },
+    { year: 800, title: "Krönung Karls des Großen", description: "Papst Leo III. krönt Karl den Großen in Rom zum Kaiser. Damit wird die weströmische Kaiserwürde im Frankenreich erneuert." },
+    { year: 843, title: "Vertrag von Verdun", description: "Die drei Enkel Karls des Großen teilen das Frankenreich unter sich auf. Die Teilung prägt die weitere Entwicklung West- und Mitteleuropas." },
+    { year: 962, title: "Kaiserkrönung Ottos I.", description: "Papst Johannes XII. krönt Otto I. in Rom zum Kaiser. Das Ereignis gilt als wichtiger Ausgangspunkt des späteren Heiligen Römischen Reiches." },
+    { year: 1054, title: "Morgenländisches Schisma", description: "Die gegenseitigen Bannungen zwischen Rom und Konstantinopel stehen symbolisch für die dauerhafte Trennung der westlichen und östlichen Kirche." },
+    { year: 1077, title: "Gang nach Canossa", description: "König Heinrich IV. reist zu Papst Gregor VII. nach Canossa und erreicht die Aufhebung seiner Exkommunikation." },
+    { year: 1096, title: "Erster Kreuzzug", description: "Der Erste Kreuzzug beginnt. In den folgenden Jahren ziehen Heere aus Westeuropa in Richtung Jerusalem." },
+    { year: 1215, title: "Magna Carta", description: "König Johann von England besiegelt die Magna Carta. Die Vereinbarung setzt dem König Grenzen und schützt bestimmte Rechte seiner Untertanen." },
+    { year: 1250, title: "Gründung europäischer Universitäten", description: "Im 13. Jahrhundert entstehen und wachsen Universitäten in vielen europäischen Städten. Sie werden zu wichtigen Zentren für Lehre und Wissenschaft." },
+    { year: 1337, title: "Hundertjähriger Krieg", description: "Der lang andauernde Konflikt zwischen England und Frankreich beginnt. Die traditionelle Datierung reicht von 1337 bis 1453." },
+    { year: 1347, title: "Beginn der Pest in Europa", description: "Die Pest erreicht über Handelswege den Mittelmeerraum und breitet sich in Europa aus. Die folgende Epidemie wird als Schwarzer Tod bekannt." },
+    { year: 1450, title: "Erfindung des Buchdrucks", description: "Johannes Gutenberg entwickelt in Mainz den Druck mit beweglichen Metalllettern weiter. Gedruckte Bücher lassen sich dadurch in größerer Zahl herstellen." },
+    { year: 1453, title: "Fall Konstantinopels", description: "Osmanische Truppen erobern Konstantinopel. Damit endet das Byzantinische Reich." },
+    { year: 1492, title: "Entdeckung Amerikas", description: "Die Expedition unter Christoph Kolumbus erreicht die Karibik. Das Ereignis markiert den Beginn dauerhafter Kontakte zwischen Europa und Amerika." }
+  ];
+
+  const timeline = document.getElementById("timeline");
+  const search = document.getElementById("search");
+  const count = document.getElementById("event-count");
+  const emptyState = document.getElementById("empty-state");
+  const dialog = document.getElementById("event-dialog");
+
+  function getEra(year) {
+    return eras.find((era) => year >= era.start && year <= era.end) ?? eras[eras.length - 1];
+  }
+
+  function showEvents(query = "") {
+    const term = query.trim().toLocaleLowerCase("de");
+    const visibleEvents = events.filter((event) => `${event.year} ${event.title}`.toLocaleLowerCase("de").includes(term));
+    timeline.replaceChildren();
+    count.textContent = visibleEvents.length;
+    emptyState.hidden = visibleEvents.length > 0;
+
+    for (const event of visibleEvents) {
+      const era = getEra(event.year);
+      const item = document.createElement("li");
+      item.className = "event";
+
+      const year = document.createElement("span");
+      year.className = "year";
+      year.textContent = event.year;
+
+      const button = document.createElement("button");
+      button.className = "event-button";
+      button.type = "button";
+      button.setAttribute("aria-label", `${event.year}: ${event.title}. Details anzeigen`);
+
+      const title = document.createElement("span");
+      title.className = "event-title";
+      title.textContent = event.title;
+
+      const eraLabel = document.createElement("span");
+      eraLabel.className = `event-era ${era.className}`;
+      eraLabel.textContent = era.name;
+
+      button.append(title, eraLabel);
+      button.addEventListener("click", () => openEvent(event, era));
+      item.append(year, button);
+      timeline.append(item);
+    }
+  }
+
+  function openEvent(event, era) {
+    document.getElementById("dialog-year").textContent = `Jahr ${event.year}`;
+    document.getElementById("dialog-title").textContent = event.title;
+    document.getElementById("dialog-description").textContent = event.description;
+    const eraLabel = document.getElementById("dialog-era");
+    eraLabel.className = `dialog-era ${era.className}`;
+    eraLabel.textContent = era.name;
+    dialog.showModal();
+  }
+
+  search.addEventListener("input", () => showEvents(search.value));
+  showEvents();
+</script>
+</body>
+</html>
